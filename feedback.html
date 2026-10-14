@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ONE BULLET 테스트</title>
+<style>
+  /* 팔레트: docs/design/아트_스타일.md (밤 #05070D, 청록 #40E8FF, 분홍 #FF40A0, 빨강 #E82828, 나트륨 #FFB040, 크림 #FFF4E0) */
+  :root { --bg:#05070D; --panel:#0E1726; --line:#1F3346; --text:#E6EDF5; --dim:#8A99AD; --cyan:#40E8FF; --pink:#FF40A0; --red:#E82828; --sodium:#FFB040; --cream:#FFF4E0; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,-apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  header { padding:20px 16px 0; max-width:880px; margin:0 auto; }
+  h1 { margin:0; font-size:22px; letter-spacing:.08em; color:var(--cream); }
+  h1 span { color:var(--pink); font-size:14px; margin-left:8px; letter-spacing:.2em; }
+  .play { display:inline-block; margin:12px 0 4px; padding:10px 18px; background:var(--cyan); color:var(--bg); font-weight:700; text-decoration:none; border-radius:4px; }
+  nav { display:flex; gap:4px; flex-wrap:wrap; max-width:880px; margin:16px auto 0; padding:0 16px; }
+  nav button { background:none; border:1px solid var(--line); color:var(--dim); padding:8px 14px; border-radius:4px 4px 0 0; cursor:pointer; font:inherit; }
+  nav button[aria-selected=true] { color:var(--cyan); border-color:var(--cyan); border-bottom-color:var(--panel); background:var(--panel); }
+  main { max-width:880px; margin:0 auto; padding:0 16px 48px; }
+  section { display:none; background:var(--panel); border:1px solid var(--line); border-radius:0 4px 4px 4px; padding:20px; }
+  section.on { display:block; }
+  h2 { font-size:17px; color:var(--cyan); margin:18px 0 6px; } h2:first-child { margin-top:0; }
+  kbd { background:#1A2636; border:1px solid var(--line); border-bottom-width:2px; border-radius:3px; padding:0 6px; font:13px ui-monospace,Consolas,monospace; color:var(--cream); }
+  .note { color:var(--dim); font-size:13px; }
+  label { display:block; margin:14px 0 4px; color:var(--cream); font-size:14px; }
+  label small { color:var(--dim); font-weight:normal; }
+  input, textarea, select { width:100%; background:#0A111C; color:var(--text); border:1px solid var(--line); border-radius:4px; padding:8px 10px; font:inherit; }
+  textarea { min-height:72px; resize:vertical; }
+  input:focus, textarea:focus, select:focus { outline:2px solid var(--cyan); outline-offset:-1px; }
+  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:0 12px; }
+  .send { margin-top:18px; padding:10px 22px; background:var(--pink); color:#fff; border:0; border-radius:4px; font:inherit; font-weight:700; cursor:pointer; }
+  .send:disabled { opacity:.5; cursor:default; }
+  .status { margin-left:12px; font-size:14px; }
+  .ok { color:var(--cyan); } .err { color:var(--red); }
+  table { width:100%; border-collapse:collapse; margin-top:8px; }
+  th, td { border-bottom:1px solid var(--line); padding:8px 6px; vertical-align:top; text-align:left; font-size:14px; }
+  th { color:var(--dim); font-weight:normal; font-size:13px; }
+  td.id { color:var(--sodium); font:13px ui-monospace,Consolas,monospace; white-space:nowrap; }
+  td select { min-width:92px; padding:4px 6px; }
+  td input { padding:4px 6px; }
+  .area { color:var(--dim); font-size:12px; display:block; }
+  @media (max-width:640px) { table, tbody, tr, td { display:block; } thead { display:none; } tr { border-bottom:1px solid var(--line); padding:6px 0; } td { border:0; padding:3px 0; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>ONE BULLET <span>PLAYTEST</span></h1>
+  <a class="play" href="./" target="_blank" rel="noopener">▶ 게임 열기 (새 탭)</a>
+  <div class="note">크롬·엣지, 키보드 + 마우스. 처음 로딩 10~20초. 게임 아래 ⛶ 버튼 = 전체화면.</div>
+</header>
+
+<nav role="tablist">
+  <button role="tab" data-tab="guide" aria-selected="true">안내</button>
+  <button role="tab" data-tab="check" aria-selected="false">체크리스트</button>
+  <button role="tab" data-tab="bug" aria-selected="false">버그 제보</button>
+  <button role="tab" data-tab="review" aria-selected="false">플레이 감상</button>
+</nav>
+
+<main>
+<section id="guide" class="on">
+  <h2>할 일 (1회 약 30분)</h2>
+  <ol>
+    <li><b>3판 이상</b> 플레이 (죽어도 됨 — 죽으면 클릭으로 바로 다음 판)</li>
+    <li><b>체크리스트</b> 탭을 보며 항목을 해 보고 결과를 보내기</li>
+    <li>이상한 게 보이면 그때그때 <b>버그 제보</b></li>
+    <li>끝나면 <b>플레이 감상</b> 한 번</li>
+  </ol>
+  <h2>조작</h2>
+  <p><kbd>WASD</kbd> 이동 · 마우스 조준 · <kbd>좌클릭</kbd> 발사<br>
+  총알이 날아가는 중 <kbd>좌클릭</kbd> = 꺾기(FLICK) · 돌아오는 중 <kbd>좌클릭</kbd> = 받아서 바로 재발사(QUICK DRAW)<br>
+  <kbd>우클릭</kbd> 총알 회수 (돌아오는 길의 적도 맞음) · <kbd>Space</kbd> 대시 · <kbd>Shift</kbd> 총알 있는 곳으로 순간이동<br>
+  상점: <kbd>1</kbd>~<kbd>4</kbd> 구매 · <kbd>R</kbd> 새로고침 · <kbd>Enter</kbd> 나가기</p>
+  <p>총알은 하나뿐. 쏘면 회수해야 다시 쏠 수 있다. 방 4개를 깨면 데모 끝 (약 10~12분).</p>
+  <h2>테스터 번호</h2>
+  <p>판이 끝난 결과 화면 <b>오른쪽 아래 <code>TESTER ABC123</code></b>. 제보·감상에 적어 주면 자동 플레이 기록(웨이브·킬·피격)과 짝지을 수 있다. 플레이 기록은 자동으로 전송되고, 이름·이메일 같은 개인 정보는 게임이 보내지 않는다.</p>
+  <h2>버그 아님 (알려진 제약)</h2>
+  <p class="note">F12 스크린샷 없음(브라우저 개발자 도구 키) · Esc는 전체화면도 빠져나감 · 소리는 화면을 한 번 클릭해야 남 · 기록(재구성 부품·돈)은 그 브라우저에만 남음</p>
+  <h2>잘 적는 법</h2>
+  <p class="note">무엇을 했나 → 무슨 일이 생겼나 → 원래 어떻게 될 줄 알았나. 화면이 필요하면 <kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>로 캡처해 드라이브 등에 올리고 링크. "재미없다", "어렵다"는 버그가 아니라 <b>플레이 감상</b>에 솔직하게 — 그게 제일 중요한 데이터.</p>
+</section>
+
+<section id="check">
+  <div class="row">
+    <div><label>이름</label><input id="c-name" maxlength="20" autocomplete="off"></div>
+    <div><label>테스터 번호 <small>결과 화면 오른쪽 아래</small></label><input id="c-tester" maxlength="6" autocomplete="off" placeholder="ABC123"></div>
+  </div>
+  <table>
+    <thead><tr><th>ID</th><th>해 볼 것</th><th>이렇게 되면 정상</th><th>결과</th><th>메모</th></tr></thead>
+    <tbody id="checks"></tbody>
+  </table>
+  <button class="send" id="c-send">체크리스트 보내기</button><span class="status" id="c-status" role="status"></span>
+</section>
+
+<section id="bug">
+  <div class="row">
+    <div><label>이름</label><input id="b-name" maxlength="20" autocomplete="off"></div>
+    <div><label>테스터 번호</label><input id="b-tester" maxlength="6" autocomplete="off" placeholder="ABC123"></div>
+    <div><label>어디서 <small>방/웨이브, 화면</small></label><input id="b-where" maxlength="40" placeholder="방 2 웨이브 5, 상점"></div>
+  </div>
+  <label>무엇을 했나</label><textarea id="b-did" maxlength="600"></textarea>
+  <label>무슨 일이 생겼나</label><textarea id="b-happened" maxlength="600"></textarea>
+  <label>원래 기대한 것</label><textarea id="b-expected" maxlength="400"></textarea>
+  <div class="row">
+    <div><label>재현</label><select id="b-repro"><option value="">고르기</option><option>항상</option><option>가끔</option><option>한 번</option></select></div>
+    <div><label>심각도</label><select id="b-severity"><option value="">고르기</option><option>치명(진행 불가)</option><option>큼</option><option>작음</option><option>의견</option></select></div>
+  </div>
+  <label>스크린샷 링크 <small>있으면</small></label><input id="b-shot" maxlength="300" placeholder="https://">
+  <button class="send" id="b-send">버그 보내기</button><span class="status" id="b-status" role="status"></span>
+</section>
+
+<section id="review">
+  <div class="row">
+    <div><label>이름</label><input id="r-name" maxlength="20" autocomplete="off"></div>
+    <div><label>테스터 번호</label><input id="r-tester" maxlength="6" autocomplete="off" placeholder="ABC123"></div>
+    <div><label>판 수</label><input id="r-runs" maxlength="4" inputmode="numeric"></div>
+    <div><label>제일 멀리 간 방 <small>1~4</small></label><input id="r-room" maxlength="4" inputmode="numeric"></div>
+  </div>
+  <div class="row">
+    <div><label>재미 <small>1 별로 ~ 5 최고</small></label><select id="r-fun"></select></div>
+    <div><label>다시 하고 싶다 <small>1~5</small></label><select id="r-again"></select></div>
+    <div><label>어려움 <small>1 쉬움 ~ 5 어려움</small></label><select id="r-hard"></select></div>
+  </div>
+  <label>제일 재밌었던 순간</label><textarea id="r-best" maxlength="600"></textarea>
+  <label>제일 답답했던 순간</label><textarea id="r-worst" maxlength="600"></textarea>
+  <label>헷갈렸던 것 <small>조작, 화면, 규칙</small></label><textarea id="r-confusing" maxlength="400"></textarea>
+  <label>한 줄 아무 말</label><textarea id="r-free" maxlength="600"></textarea>
+  <button class="send" id="r-send">감상 보내기</button><span class="status" id="r-status" role="status"></span>
+</section>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var URL_ = (window.OB_LOG_URL || '');
+  var CHECKS = [
+    ['C01','시작','링크를 열고 첫 화면까지','20초 안에 제목과 캐릭터가 보인다. 하얀 사각형 없음'],
+    ['C02','시작','조준하고 좌클릭','총알이 나가고 웨이브 1 시작. 첫 줄 적이 한 발에 여럿 꿰뚫린다'],
+    ['C03','조작','우클릭 (회수)','총알이 휘어서 돌아오고 경로의 적도 맞는다. 브라우저 메뉴가 안 뜬다'],
+    ['C04','조작','날아가는 중 좌클릭 (FLICK)','마우스 쪽으로 꺾인다. 적을 죽일 때마다 다시 꺾을 수 있다'],
+    ['C05','조작','돌아오는 총알이 가까울 때 좌클릭','받자마자 재발사, QUICK DRAW 글자'],
+    ['C06','조작','Space 대시 / Shift 순간이동','대시 중엔 안 맞는다. Shift는 총알 자리로 이동하며 잡는다'],
+    ['C07','적','적이 빨갛게 빛날 때(공격 예고) 똑바로 달아나기','대부분 빗나가고 가끔 CLOSE 글자'],
+    ['C08','적','예고 중 쏘면서 뒷걸음질','맞는다 (예고를 보면 달아나거나 대시해야 함)'],
+    ['C09','적','예고 중 대시로 적을 통과','PERFECT DODGE + 잠깐 느려짐'],
+    ['C10','적','BOMBER(붉은 등)의 바닥 원 밖으로','무조건 터지고 원 밖이면 안 다친다. 주변 적이 휘말린다'],
+    ['C11','적','적 무리가 들어오는 모양','벽에서 나를 향한 세로 줄로 온다. 한 발에 여러 마리 꿰뚫기 쉬운가?'],
+    ['C12','적','SWARM INCOMING (작고 어두운 졸개 떼)','입구에서 줄지어 나와 한 발에 우르르 쓸린다'],
+    ['C13','돈','총알이 손에 돌아올 때','정산 금액이 뜨고 오른쪽 위 지갑이 오른다'],
+    ['C14','돈','웨이브 끝 바닥 총알을 다음 웨이브에 회수하며 처치','손에 들어올 때 정산 금액이 뜬다 (돈이 사라지면 버그)'],
+    ['C15','돈','스타일 등급 (오른쪽 위 D~S)','한 발에 여러 마리면 오르고, 맞거나 쉬면 내려간다'],
+    ['C16','상점','웨이브 3 뒤 암시장','카드 4장, 1~4 구매, R 새로고침, Enter로 나가기'],
+    ['C17','상점','같은 아이템 3개','EVOLVED 진화 연출'],
+    ['C18','CASH OUT','방 2 끝 정산서','도장 두 개: 챙기고 나간다 / 더 건다. 고민이 되는가?'],
+    ['C19','진행','죽은 뒤 결과 화면 → B 재구성','부품 트리가 열리고 BANKED 돈으로 장착된다'],
+    ['C20','진행','방 4 클리어','DEMO CLEAR 화면'],
+    ['C21','성능','적이 많을 때 (방 3~4)','끊김 없이 부드러운가? 끊기면 몇 번째 방이었는지 메모']
+  ];
+
+  // 탭
+  var tabs = document.querySelectorAll('nav button');
+  tabs.forEach(function (b) {
+    b.addEventListener('click', function () {
+      tabs.forEach(function (x) { x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      document.querySelectorAll('section').forEach(function (s) { s.classList.toggle('on', s.id === b.dataset.tab); });
+    });
+  });
+
+  // 체크리스트 표 (텍스트는 textContent로만)
+  var tbody = document.getElementById('checks');
+  CHECKS.forEach(function (c) {
+    var tr = document.createElement('tr');
+    var id = document.createElement('td'); id.className = 'id'; id.textContent = c[0];
+    var todo = document.createElement('td');
+    var area = document.createElement('span'); area.className = 'area'; area.textContent = c[1];
+    todo.appendChild(area); todo.appendChild(document.createTextNode(c[2]));
+    var ok = document.createElement('td'); ok.textContent = c[3];
+    var res = document.createElement('td'); var sel = document.createElement('select'); sel.dataset.id = c[0];
+    ['', '정상', '버그', '애매', '못 해봄'].forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o || '—'; sel.appendChild(op); });
+    res.appendChild(sel);
+    var memo = document.createElement('td'); var inp = document.createElement('input'); inp.maxLength = 80; inp.dataset.id = c[0]; memo.appendChild(inp);
+    tr.append(id, todo, ok, res, memo);
+    tbody.appendChild(tr);
+  });
+
+  ['r-fun', 'r-again', 'r-hard'].forEach(function (id) {
+    var s = document.getElementById(id);
+    ['', '1', '2', '3', '4', '5'].forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o || '고르기'; s.appendChild(op); });
+  });
+
+  // 이름·테스터 번호는 이 브라우저에 기억 (다음 제보 때 다시 안 적게)
+  function remember(ids) {
+    ids.forEach(function (id) {
+      var el = document.getElementById(id), key = 'ob.fb.' + id.slice(2);
+      try { el.value = localStorage.getItem(key) || ''; } catch (e) {}
+      el.addEventListener('change', function () {
+        try { localStorage.setItem(key, el.value); } catch (e) {}
+        ['c-', 'b-', 'r-'].forEach(function (p) { var o = document.getElementById(p + id.slice(2)); if (o && o !== el) o.value = el.value; });
+      });
+    });
+  }
+  remember(['c-name', 'c-tester', 'b-name', 'b-tester', 'r-name', 'r-tester']);
+
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function tester(id) { var v = val(id).toUpperCase(); return /^[A-Z0-9]{6}$/.test(v) ? v : ''; }
+
+  function send(form, fields, btn, status, after) {
+    var st = document.getElementById(status), b = document.getElementById(btn);
+    if (!URL_) { st.className = 'status err'; st.textContent = '아직 받는 주소가 설정 안 됨 — 개발자에게 알려 주세요'; return; }
+    b.disabled = true; st.className = 'status'; st.textContent = '보내는 중…';
+    fetch(URL_, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ kind: 'feedback', form: form, fields: fields }) })
+      .then(function (r) { return r.text(); })
+      .then(function (t) {
+        if (t === 'ok') { st.className = 'status ok'; st.textContent = '보냈어요. 고마워요!'; if (after) after(); }
+        else { st.className = 'status err'; st.textContent = t === 'skip' ? '빈 칸이 많거나 너무 자주 보냈어요. 잠시 뒤 다시.' : '저장 실패 (' + t + ')'; }
+      })
+      .catch(function () { st.className = 'status err'; st.textContent = '보내기 실패 — 인터넷 확인 후 다시'; })
+      .then(function () { b.disabled = false; });
+  }
+
+  document.getElementById('c-send').addEventListener('click', function () {
+    var parts = [];
+    tbody.querySelectorAll('select').forEach(function (s) {
+      var memo = tbody.querySelector('input[data-id="' + s.dataset.id + '"]').value.trim();
+      if (s.value || memo) parts.push(s.dataset.id + '=' + (s.value || '?') + (memo ? ': ' + memo.replace(/[|]/g, '/') : ''));
+    });
+    if (!parts.length) { var st = document.getElementById('c-status'); st.className = 'status err'; st.textContent = '결과를 하나 이상 골라 주세요'; return; }
+    send('check', { name: val('c-name'), tester: tester('c-tester'), results: parts.join(' | ') }, 'c-send', 'c-status');
+  });
+
+  document.getElementById('b-send').addEventListener('click', function () {
+    if (!val('b-happened')) { var st = document.getElementById('b-status'); st.className = 'status err'; st.textContent = '"무슨 일이 생겼나"는 꼭 적어 주세요'; return; }
+    send('bug', { name: val('b-name'), tester: tester('b-tester'), where: val('b-where'), did: val('b-did'), happened: val('b-happened'),
+      expected: val('b-expected'), repro: val('b-repro'), severity: val('b-severity'), shot: val('b-shot') }, 'b-send', 'b-status',
+      function () { ['b-where', 'b-did', 'b-happened', 'b-expected', 'b-shot'].forEach(function (id) { document.getElementById(id).value = ''; });
+        document.getElementById('b-repro').value = ''; document.getElementById('b-severity').value = ''; });
+  });
+
+  document.getElementById('r-send').addEventListener('click', function () {
+    send('review', { name: val('r-name'), tester: tester('r-tester'), runs: val('r-runs'), room: val('r-room'), fun: val('r-fun'), again: val('r-again'),
+      hard: val('r-hard'), best: val('r-best'), worst: val('r-worst'), confusing: val('r-confusing'), free: val('r-free') }, 'r-send', 'r-status');
+  });
+})();
+</script>
+</body>
+</html>
